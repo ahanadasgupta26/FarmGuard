@@ -1,4 +1,4 @@
-### Project Title: Disease Prediction Using Machine Learning
+### Project Title: Disease Prediction and Yield Prediction Using Machine Learning
 
 #### Step 1: Define the Project Objectives
 - **Objective**: To build predictive models that can classify or predict diseases based on the provided dataset.
