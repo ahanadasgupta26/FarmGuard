@@ -14,10 +14,7 @@ feature_columns = joblib.load('feature_columns.pkl')
 
 yield_model = joblib.load('yield_prediction_model.pkl')
 
-disease_labels = ['Healthy', 'Leaf Spot', 'Powdery Mildew', 'Root Rot']
-disease_labels = ['Leaf Spot','Healthy', 'Powdery Mildew', 'Root Rot']
-disease_labels = ['Powdery Mildew','Healthy', 'Leaf Spot', 'Root Rot']
-disease_labels = ['Root Rot','Powdery Mildew','Healthy', 'Leaf Spot', ]
+disease_labels = ['Root Rot','Powdery Mildew','Healthy', 'Leaf Spot']
 
 st.set_page_config(layout="wide")
 
@@ -201,13 +198,17 @@ if st.session_state.selected == "Home":
 
     with col4:
         st.markdown("### Tasks for the Day")
-        st.write("Add your daily goals:")
+        st.write("Your daily goals:")
         task1 = st.checkbox("Check soil moisture levels")
         task2 = st.checkbox("Inspect crops for pests or diseases")
         task3 = st.checkbox("Make organic paste")
         task4 = st.checkbox("Buy fertilizer")
         task5 = st.checkbox("Water the crops")
     st.write("##")   
+
+if selected=="Community":
+     st.markdown("<h1 style='text-align: center; color: black; margin-bottom: 50px;'>My Community</h1>", unsafe_allow_html=True)   
+
 if selected == "About Us":
     st.markdown("<h1 style='text-align: center; color: black; margin-bottom: 50px;'>About Us</h1>", unsafe_allow_html=True)
     st.markdown(
@@ -236,50 +237,77 @@ if selected == "About Us":
     st.write("##")
 
 if selected == "Analysis":
-    #st.write("#")
     st.markdown("<h3 style='font-size:24px;'>Select Analysis Type</h3>", unsafe_allow_html=True)
 
-    analysis_option = st.selectbox("", ["Yield Prediction", "Disease Prediction"])
+    analysis_option = st.selectbox("", ["Yield Prediction", "Disease Prediction"], key="analysis_select")
 
     if analysis_option == "Yield Prediction":
         st.write("## Enter the following details:")
-        soil_quality = st.number_input("Soil Quality (It refers to the soil's ability to sustain plant growth, support ecosystems, and maintain environmental health)", min_value=0, max_value=100, step=1)
-        rainfall = st.number_input("Rainfall (mm)", min_value=0, max_value=500, step=1)
-        fertilizer = st.number_input("Fertilizer (kg)", min_value=0, max_value=200, step=1)
-        temperature = st.number_input("Temperature (°C)", min_value=0.0, max_value=50.0, step=0.1)
-        humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, step=0.1)
+        soil_quality = st.number_input("Soil Quality (It refers to the soil's ability to sustain plant growth, support ecosystems, and maintain environmental health)", 
+                                     min_value=0, max_value=100, step=1, key="soil_quality")
+        rainfall = st.number_input("Rainfall (mm)", min_value=0, max_value=500, step=1, key="rainfall")
+        fertilizer = st.number_input("Fertilizer (kg)", min_value=0, max_value=200, step=1, key="fertilizer")
+        temperature = st.number_input("Temperature (°C)", min_value=0.0, max_value=50.0, step=0.1, key="temperature")
+        humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, step=0.1, key="humidity")
 
-        if st.button("🔍 Predict Yield"):
+        if st.button("🔍 Predict Yield", key="predict_yield"):
             input_data = pd.DataFrame([[soil_quality, rainfall, fertilizer, temperature, humidity]],
-                                      columns=['soil_quality', 'rainfall', 'fertilizer', 'temperature', 'humidity'])
+                                    columns=['soil_quality', 'rainfall', 'fertilizer', 'temperature', 'humidity'])
         
             predicted_yield = yield_model.predict(input_data)[0]
-
             st.success(f"### 🌾 Predicted Yield: **{predicted_yield:.2f} kg/ha**")
-    
 
     elif analysis_option == "Disease Prediction":
-        st.write("## Enter the following details:")
-        yellow_leaves = st.number_input("Yellow Leaves (0 or 1)", min_value=0, max_value=1, step=1)
-        wilting = st.number_input("Wilting (0 or 1)", min_value=0, max_value=1, step=1)
-        white_powder = st.number_input("White Powder (0 or 1)", min_value=0, max_value=1, step=1)
-        brown_spots = st.number_input("Brown Spots (0 or 1)", min_value=0, max_value=1, step=1)
-        stunted_growth = st.number_input("Stunted Growth (0 or 1)", min_value=0, max_value=1, step=1)
+        # Create tabs for different input methods
+        tab1, tab2 = st.tabs(["Image Analysis", "Manual Input"])
+        
+        with tab1:
+            st.markdown("### Upload Plant Image for Disease Detection")
+            uploaded_image = st.file_uploader("Choose an image of the affected plant", 
+                                           type=["jpg", "jpeg", "png"],
+                                           accept_multiple_files=False,
+                                           key="disease_image_uploader")
+            
+            if uploaded_image is not None:
+                st.image(uploaded_image, caption='Uploaded Plant Image', width=300)
+                
+                if st.button("🔍 Analyze Image", key="analyze_image"):
+                    # Simulated prediction (replace with actual model prediction)
+                    simulated_prediction = np.random.choice(disease_labels)
+                    st.success(f"### 🌱 Simulated Prediction: **{simulated_prediction}**")
+        
+        with tab2:
+            st.markdown("### Enter Symptoms Manually")
+            yellow_leaves = st.number_input("Yellow Leaves (0 or 1)", 
+                                         min_value=0, max_value=1, step=1,
+                                         key="yellow_leaves_input")
+            wilting = st.number_input("Wilting (0 or 1)", 
+                                   min_value=0, max_value=1, step=1,
+                                   key="wilting_input")
+            white_powder = st.number_input("White Powder (0 or 1)", 
+                                        min_value=0, max_value=1, step=1,
+                                        key="white_powder_input")
+            brown_spots = st.number_input("Brown Spots (0 or 1)", 
+                                       min_value=0, max_value=1, step=1,
+                                       key="brown_spots_input")
+            stunted_growth = st.number_input("Stunted Growth (0 or 1)", 
+                                          min_value=0, max_value=1, step=1,
+                                          key="stunted_growth_input")
 
-        if st.button("🔍 Predict Disease"):
-            input_data = pd.DataFrame([[yellow_leaves, wilting, white_powder, brown_spots, stunted_growth]],
-                                      columns=['yellow_leaves', 'wilting', 'white_powder', 'brown_spots', 'stunted_growth'])
+            if st.button("🔍 Predict Disease from Symptoms", key="predict_symptoms"):
+                input_data = pd.DataFrame([[yellow_leaves, wilting, white_powder, brown_spots, stunted_growth]],
+                                        columns=['yellow_leaves', 'wilting', 'white_powder', 'brown_spots', 'stunted_growth'])
 
-            for col in feature_columns:
-                if col not in input_data.columns:
-                    input_data[col] = 0
+                for col in feature_columns:
+                    if col not in input_data.columns:
+                        input_data[col] = 0
 
-            input_data = input_data[feature_columns]
-            input_scaled = scaler.transform(input_data)
-            prediction = model.predict(input_scaled)
-            predicted_label = np.argmax(prediction, axis=1)[0]
-            st.success(f"### 🌱 Predicted Disease: **{disease_labels[predicted_label]}**")
-                       
+                input_data = input_data[feature_columns]
+                input_scaled = scaler.transform(input_data)
+                prediction = model.predict(input_scaled)
+                predicted_label = np.argmax(prediction, axis=1)[0]
+                st.success(f"### 🌱 Predicted Disease: **{disease_labels[predicted_label]}**")
+
 if selected == "Contact Us":
     st.write("Reach out to us here!")
     with st.container():
