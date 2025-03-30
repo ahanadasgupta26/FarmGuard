@@ -258,7 +258,7 @@ if selected == "Analysis":
             st.success(f"### 🌾 Predicted Yield: **{predicted_yield:.2f} kg/ha**")
 
     elif analysis_option == "Disease Prediction":
-        # Create tabs for different input methods
+       
         tab1, tab2 = st.tabs(["Image Analysis", "Manual Input"])
         
         with tab1:
@@ -272,7 +272,7 @@ if selected == "Analysis":
                 st.image(uploaded_image, caption='Uploaded Plant Image', width=300)
                 
                 if st.button("🔍 Analyze Image", key="analyze_image"):
-                    # Simulated prediction (replace with actual model prediction)
+                    
                     simulated_prediction = np.random.choice(disease_labels)
                     st.success(f"### 🌱 Simulated Prediction: **{simulated_prediction}**")
         
