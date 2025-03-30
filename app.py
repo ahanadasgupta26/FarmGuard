@@ -490,9 +490,3 @@ if st.session_state.selected == "Home":
         else:
             st.warning("Please enter text to translate.")
 
-    def speak_text(content):
-        try:
-            texttospeech.say(content)
-            texttospeech.runAndWait()
-        except Exception as e:
-            st.error(f"Speech synthesis failed: {e}")
