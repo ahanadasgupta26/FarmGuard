@@ -382,25 +382,90 @@ if st.session_state.selected == "Home":
     except Exception as e:
         st.error(f"Failed to initialize Text-to-Speech engine: {e}")
 
-    # Language Dictionary
     languages = {
-        'af': 'Afrikaans', 'sq': 'Albanian', 'am': 'Amharic', 'ar': 'Arabic', 'hy': 'Armenian', 'az': 'Azerbaijani',
-        'eu': 'Basque', 'be': 'Belarusian', 'bn': 'Bengali', 'bs': 'Bosnian', 'bg': 'Bulgarian', 'ca': 'Catalan',
-        'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Traditional)', 'hr': 'Croatian', 'cs': 'Czech',
-        'da': 'Danish', 'nl': 'Dutch', 'en': 'English', 'et': 'Estonian', 'fi': 'Finnish', 'fr': 'French',
-        'gl': 'Galician', 'ka': 'Georgian', 'de': 'German', 'el': 'Greek', 'gu': 'Gujarati', 'ht': 'Haitian Creole',
-        'he': 'Hebrew', 'hi': 'Hindi', 'hu': 'Hungarian', 'is': 'Icelandic', 'id': 'Indonesian', 'ga': 'Irish',
-        'it': 'Italian', 'ja': 'Japanese', 'kn': 'Kannada', 'ko': 'Korean', 'ku': 'Kurdish', 'lv': 'Latvian',
-        'lt': 'Lithuanian', 'mk': 'Macedonian', 'ms': 'Malay', 'ml': 'Malayalam', 'mt': 'Maltese', 'mi': 'Maori',
-        'mr': 'Marathi', 'mn': 'Mongolian', 'my': 'Myanmar (Burmese)', 'ne': 'Nepali', 'no': 'Norwegian', 'or': 'Oriya',
-        'ps': 'Pashto', 'fa': 'Persian', 'pl': 'Polish', 'pt': 'Portuguese', 'pa': 'Punjabi', 'ro': 'Romanian',
-        'ru': 'Russian', 'sr': 'Serbian', 'st': 'Sesotho', 'si': 'Sinhala', 'sk': 'Slovak', 'sl': 'Slovenian',
-        'es': 'Spanish', 'sw': 'Swahili', 'sv': 'Swedish', 'tg': 'Tajik', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Thai',
-        'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu', 'uz': 'Uzbek', 'vi': 'Vietnamese', 'cy': 'Welsh',
-        'xh': 'Xhosa', 'yi': 'Yiddish', 'yo': 'Yoruba', 'zu': 'Zulu'
+        'af': 'Afrikaans', 
+        'sq': 'Albanian', 
+        'am': 'Amharic', 
+        'ar': 'Arabic', 
+        'hy': 'Armenian', 
+        'az': 'Azerbaijani',
+        'eu': 'Basque', 
+        'be': 'Belarusian', 
+        'bn': 'Bengali', 
+        'bs': 'Bosnian', 
+        'bg': 'Bulgarian', 
+        'ca': 'Catalan',
+        'zh-CN': 'Chinese (Simplified)', 
+        'zh-TW': 'Chinese (Traditional)', 
+        'hr': 'Croatian', 
+        'cs': 'Czech',
+        'da': 'Danish', 
+        'nl': 'Dutch', 
+        'en': 'English', 
+        'et': 'Estonian', 
+        'fi': 'Finnish', 
+        'fr': 'French',
+        'gl': 'Galician', 
+        'ka': 'Georgian', 
+        'de': 'German', 
+        'el': 'Greek', 
+        'gu': 'Gujarati', 
+        'ht': 'Haitian Creole',
+        'he': 'Hebrew', 
+        'hi': 'Hindi', 
+        'hu': 'Hungarian', 
+        'is': 'Icelandic', 
+        'id': 'Indonesian', 
+        'ga': 'Irish',
+        'it': 'Italian', 
+        'ja': 'Japanese', 
+        'kn': 'Kannada', 
+        'ko': 'Korean', 
+        'ku': 'Kurdish', 
+        'lv': 'Latvian',
+        'lt': 'Lithuanian', 
+        'mk': 'Macedonian', 
+        'ms': 'Malay', 
+        'ml': 'Malayalam', 
+        'mt': 'Maltese', 
+        'mi': 'Maori',
+        'mr': 'Marathi', 
+        'mn': 'Mongolian', 
+        'my': 'Myanmar (Burmese)', 
+        'ne': 'Nepali', 
+        'no': 'Norwegian', 
+        'or': 'Oriya',
+        'ps': 'Pashto', 
+        'fa': 'Persian', 
+        'pl': 'Polish', 
+        'pt': 'Portuguese', 
+        'pa': 'Punjabi', 
+        'ro': 'Romanian',
+        'ru': 'Russian', 
+        'sr': 'Serbian', 
+        'st': 'Sesotho', 
+        'si': 'Sinhala', 
+        'sk': 'Slovak', 
+        'sl': 'Slovenian',
+        'es': 'Spanish', 
+        'sw': 'Swahili', 
+        'sv': 'Swedish', 
+        'tg': 'Tajik', 
+        'ta': 'Tamil', 
+        'te': 'Telugu', 
+        'th': 'Thai',
+        'tr': 'Turkish', 
+        'uk': 'Ukrainian', 
+        'ur': 'Urdu', 
+        'uz': 'Uzbek', 
+        'vi': 'Vietnamese', 
+        'cy': 'Welsh',
+        'xh': 'Xhosa', 
+        'yi': 'Yiddish', 
+        'yo': 'Yoruba', 
+        'zu': 'Zulu'
     }
 
-    # Language Selection
     col1, col2 = st.columns(2)
     with col1:
         source_lang = st.selectbox("Select Source Language", options=list(languages.values()),
@@ -409,10 +474,8 @@ if st.session_state.selected == "Home":
         target_lang = st.selectbox("Select Target Language", options=list(languages.values()),
                                     index=list(languages.values()).index("Spanish"))
 
-    # Text Input
     text = st.text_area("Enter text to translate:", height=150)
 
-    # Translate Button
     if st.button("Translate"):
         if text.strip():
             source_code = list(languages.keys())[list(languages.values()).index(source_lang)]
@@ -427,11 +490,9 @@ if st.session_state.selected == "Home":
         else:
             st.warning("Please enter text to translate.")
 
-    # Text-to-Speech
     def speak_text(content):
         try:
             texttospeech.say(content)
             texttospeech.runAndWait()
         except Exception as e:
             st.error(f"Speech synthesis failed: {e}")
-
